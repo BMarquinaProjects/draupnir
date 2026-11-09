@@ -1,0 +1,50 @@
+# Ignorar lo que se regenera solo; versionar lo que creas tú. Basado en el de Akmon.
+
+# --- KiCad: copias, autoguardado, cachés y estado local ---
+*-backups/
+_autosave-*
+*.kicad_sch-bak
+*.kicad_pcb-bak
+*.bak
+*.lck
+~*.lck
+fp-info-cache
+*.kicad_sym-cache
+*.kicad_prl
+
+# --- Altium: historial, registros y vistas previas ---
+History/
+Project Logs for */
+Project Outputs for */
+__Previews/
+*.PcbDoc.htm
+*.SchDocPreview
+*.PcbDocPreview
+*.PrjPcbStructure
+
+# --- Salidas de fabricación: se regeneran con el jobset y se publican como release ---
+**/fabricacion/*
+!**/fabricacion/*-bom.csv
+*.zip
+*.gbr
+*.gbrjob
+*.drl
+
+# --- Firmware: compilados ---
+firmware/build/
+*.elf
+*.bin
+*.hex
+*.map
+
+# --- Hojas de datos y modelos SPICE: son de sus fabricantes; aquí solo el enlace ---
+docs/hojas-de-datos/*.pdf
+simulacion/modelos/
+
+# --- Plan de la campaña (generado, personal) ---
+pasos.html
+
+# --- Sistema ---
+desktop.ini
+Thumbs.db
+*.ico

@@ -1,0 +1,10 @@
+# Finales de línea LF en todos los archivos de texto (igual que Akmon).
+* text=auto eol=lf
+*.png  binary
+*.jpg  binary
+*.pdf  binary
+*.zip  binary
+*.step binary
+*.wrl  binary
+*.sr   binary
+*.uf2  binary

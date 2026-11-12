@@ -41,8 +41,10 @@ firmware/build/
 docs/hojas-de-datos/*.pdf
 simulacion/modelos/
 
-# --- Plan de la campaña (generado, personal) ---
+# --- Plan de la campaña y guía de trabajo (personales) ---
 pasos.html
+guia-altium.html
+guia-kicad.html
 
 # --- Sistema ---
 desktop.ini

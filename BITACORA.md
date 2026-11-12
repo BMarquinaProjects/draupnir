@@ -1,4 +1,4 @@
-# Bitácora de Argos
+# Bitácora de Draupnir
 
 > Regla 4 de la casa: cada fallo, con qué falló, por qué y cómo se arregló. Regla 3: ningún «funciona» sin una medida.
 > Lo más nuevo, arriba. Una entrada por fallo, aunque sea pequeño: dentro de un año es lo que más vale.
@@ -20,3 +20,5 @@
 - **Medida que lo demuestra:**
 - **Lo que haré distinto:**
 -->
+## Version KiCad
+10.0.6

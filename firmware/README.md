@@ -1,6 +1,6 @@
 # firmware
 
-Argos no lleva firmware propio en la v1: usa [sigrok-pico](https://github.com/pico-coder/sigrok-pico).
+Draupnir no lleva firmware propio en la v1: usa [sigrok-pico](https://github.com/pico-coder/sigrok-pico).
 
 | Dato | Valor |
 |---|---|

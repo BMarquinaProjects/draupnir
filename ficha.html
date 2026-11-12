@@ -1,0 +1,367 @@
+<title>Draupnir</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
+
+<script>
+/* ============================================================
+   EDITA AQUÍ. Es lo único que hay que tocar de este archivo.
+   Deja "" en lo que aún no tengas: la página lo marca como pendiente.
+   Las imágenes no se apuntan aquí: aparecen solas cuando guardas
+   el archivo con el nombre que pide la guía (capturas\ y fotos\).
+   ============================================================ */
+window.FICHA = {
+  version: "v1.0",
+  estado: "diseño",          // "diseño", "pedida", "montada" o "medida"
+  herramienta: "",           // la que hayas usado: "KiCad 10" o "Altium Designer 26"
+  autor: "",                 // tu nombre, como quieras que salga
+  repositorio: "",           // la dirección de GitHub cuando lo publiques
+
+  // Con tus palabras, en dos o tres frases cada una. Salen de BITACORA.md (pasos 1.2, 1.3 y 1.4 de la guía).
+  // Si la hiciste en KiCad, añade una cuarta: por qué una huella propia para las resistencias (paso 2.4).
+  decisiones: [
+    { pregunta: "¿Protege la resistencia en serie contra 5 V?", texto: "" },
+    { pregunta: "¿Qué valor de resistencia, y por qué?",        texto: "" },
+    { pregunta: "¿Por qué ocho masas en el conector?",          texto: "" }
+  ],
+
+  // Cada medida, con su unidad. Entre paréntesis, el paso de la guía donde se toma.
+  medidas: {
+    resistencia_serie: "",   // (1.3) p. ej. "1 kΩ"
+    baudio_uart: "",         // (1.5) p. ej. "115 200 baudios configurados, 115 340 medidos"
+    drc: "",                 // (4.10) p. ej. "0 fallos"
+    tension_3v3: "",         // (7.3) p. ej. "3,29 V"
+    canales: "",             // (7.4) p. ej. "8 de 8"
+    limite_util: ""          // (7.5) p. ej. "6 MHz, limitado por el muestreo"
+  },
+
+  coste: { placas: "", envio: "", piezas: "" },   // en euros, p. ej. "2,10 €"
+  fechas: { pedido: "", montaje: "" },             // p. ej. "20 nov 2026"
+
+  // El fallo que más te enseñó (regla 4 de la casa).
+  fallo: { que: "", por_que: "", arreglo: "" },
+
+  // Tres cosas que sabes hacer ahora y antes no.
+  aprendido: ["", "", ""]
+};
+</script>
+
+<style>
+/* Hoja de proyecto: arriba qué es y cómo quedó; debajo, las decisiones y las pruebas que lo demuestran. */
+:root {
+  --stone: #ECEEE8; --paper: #F8F9F5; --iron: #1C2226; --ash: #58635E; --rule: #CBD1C8;
+  --verdigris: #2B7769; --verdigris-soft: #D6E6E0;
+  --bronze: #9E5D25; --bronze-soft: #F0E1D1;
+  --sea: #2E5F7C; --sea-soft: #D3E1EA;
+  --f-display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "Literata", Georgia, "Times New Roman", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --stone: #111614; --paper: #182019; --iron: #E3E8E1; --ash: #9CA8A1; --rule: #2D3833;
+    --verdigris: #6DC2AE; --verdigris-soft: #1C3530; --bronze: #DA9A5E; --bronze-soft: #3A2A1B;
+    --sea: #86B6D3; --sea-soft: #13212A;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --stone: #111614; --paper: #182019; --iron: #E3E8E1; --ash: #9CA8A1; --rule: #2D3833;
+  --verdigris: #6DC2AE; --verdigris-soft: #1C3530; --bronze: #DA9A5E; --bronze-soft: #3A2A1B;
+  --sea: #86B6D3; --sea-soft: #13212A;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--stone); color: var(--iron);
+  font: 400 1rem/1.6 var(--f-body);
+  padding-block: 0 5rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 860px; margin: 0 auto; display: grid; gap: 2.25rem; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.06; }
+p { margin: 0; max-width: 66ch; }
+a { color: var(--sea); }
+:focus-visible { outline: 2px solid var(--bronze); outline-offset: 2px; }
+
+header { padding-top: 2.2rem; display: grid; gap: .7rem; }
+.eyebrow { font: 500 .78rem/1.2 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ash); }
+h1 { font-size: clamp(2.8rem, 9vw, 4.4rem); font-weight: 800; letter-spacing: -.01em; }
+.lema { font-size: 1.15rem; color: var(--ash); }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; margin: .2rem 0 0; padding: 0; }
+.chips li { font: 500 .78rem/1 var(--f-mono); border: 1px solid var(--rule); background: var(--paper); padding: .4rem .6rem; border-radius: 3px; }
+.chips li.estado { border-color: var(--verdigris); background: var(--verdigris-soft); color: var(--verdigris); }
+
+.borrador { border: 1px dashed var(--bronze); background: var(--bronze-soft); padding: .9rem 1.1rem; display: grid; gap: .5rem; }
+.borrador b { font: 500 .78rem/1.2 var(--f-mono); letter-spacing: .07em; text-transform: uppercase; color: var(--bronze); }
+.borrador ul { margin: 0; padding-left: 1.1rem; font: 400 .84rem/1.5 var(--f-mono); columns: 2 260px; column-gap: 2rem; }
+
+section { display: grid; gap: 1rem; }
+section > h2 { font-size: 1.9rem; font-weight: 700; border-top: 3px solid var(--verdigris); padding-top: .7rem; }
+
+figure { margin: 0; display: grid; gap: .4rem; }
+figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); background: var(--paper); }
+figcaption { font: 400 .8rem/1.4 var(--f-mono); color: var(--ash); }
+.hueco { border: 1px dashed var(--rule); background: var(--paper); min-height: 9rem; display: grid; place-content: center; text-align: center; gap: .3rem; padding: 1rem; }
+.hueco b { font: 500 .8rem/1.3 var(--f-mono); color: var(--ash); }
+.hueco span { font: 400 .76rem/1.3 var(--f-mono); color: var(--ash); }
+.galeria { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+
+.tabla { overflow-x: auto; }
+table { border-collapse: collapse; font: 400 .86rem/1.4 var(--f-mono); font-variant-numeric: tabular-nums; min-width: 100%; }
+th, td { text-align: left; padding: .4rem .8rem .4rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 500; color: var(--ash); letter-spacing: .05em; text-transform: uppercase; font-size: .74rem; white-space: nowrap; }
+td.n, th.n { text-align: right; }
+.pend { color: var(--bronze); font-style: italic; }
+
+.decisiones { display: grid; gap: 1rem; }
+.decision { display: grid; gap: .35rem; padding-left: 1rem; border-left: 2px solid var(--verdigris); }
+.decision h3 { font-size: 1.3rem; font-weight: 700; }
+ul.lista { margin: 0; padding-left: 1.2rem; display: grid; gap: .3rem; }
+ul.lista li { max-width: 66ch; }
+dl.fallo { margin: 0; display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: .5rem 1rem; }
+dl.fallo dt { font: 500 .76rem/1.7 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ash); }
+dl.fallo dd { margin: 0; max-width: 60ch; }
+footer { font: 400 .8rem/1.5 var(--f-mono); color: var(--ash); border-top: 1px solid var(--rule); padding-top: 1rem; }
+@media (max-width: 520px) { dl.fallo { grid-template-columns: 1fr; gap: .1rem; } dl.fallo dd { margin-bottom: .5rem; } }
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Forja · instrumentación · hardware abierto</div>
+  <h1>Draupnir</h1>
+  <p class="lema">Analizador lógico de 8 canales sobre una Raspberry Pi Pico. Mi primera placa, diseñada de principio a fin<span id="herr-lema"></span>.</p>
+  <ul class="chips" id="chips">
+    <li class="estado">En diseño</li>
+    <li>v1.0</li>
+    <li>2 capas · 58,4 × 55,9 mm</li>
+    <li id="chip-herr">Herramienta: pendiente</li>
+    <li>JLCPCB</li>
+    <li>sigrok-pico · PulseView</li>
+  </ul>
+</header>
+
+<div class="borrador" id="borrador">
+  <b>Borrador: faltan piezas para completar la ficha</b>
+  <ul id="faltan"><li>Se comprueba al abrir la página.</li></ul>
+</div>
+
+<figure data-img="fotos/draupnir.jpg,capturas/pcb-3d.png" data-paso="7.4 (foto) o 4.11 (vista 3D)">
+  <div class="hueco"><b>Falta la foto de la placa montada</b><span>fotos\draupnir.jpg · paso 7.4 de la guía</span></div>
+  <figcaption>Draupnir v1.0.</figcaption>
+</figure>
+
+<section>
+  <h2>Qué es</h2>
+  <p>Draupnir captura ocho señales digitales a la vez y las manda por USB al PC, donde PulseView las dibuja y decodifica UART, I²C o SPI. El muestreo lo hace una Raspberry Pi Pico con el firmware libre sigrok-pico. La placa es lo que la convierte en un instrumento: un conector con una masa junto a cada señal, una resistencia en serie por canal y los nombres de canal en la serigrafía.</p>
+  <p>Lo hice para depurar mis otros proyectos del banco, una fuente y una carga electrónica, sin comprar un analizador. El nombre es el del anillo de Odín, que cada nueve noches gotea ocho anillos iguales a él.</p>
+</section>
+
+<section>
+  <h2>Especificación</h2>
+  <div class="tabla"><table>
+    <thead><tr><th>Parámetro</th><th>Diseño</th><th>Medido</th></tr></thead>
+    <tbody>
+      <tr><td>Canales</td><td>8 (D2 a D9 de sigrok-pico)</td><td data-m="canales"></td></tr>
+      <tr><td>Niveles de entrada</td><td>3,3 V. No admite 5 V</td><td>—</td></tr>
+      <tr><td>Resistencia en serie por canal</td><td data-m="resistencia_serie"></td><td>—</td></tr>
+      <tr><td>Señal más rápida capturada bien</td><td>Unos 6 MHz a 60 Msps</td><td data-m="limite_util"></td></tr>
+      <tr><td>Alimentación de la Pico</td><td>3,3 V por USB</td><td data-m="tension_3v3"></td></tr>
+      <tr><td>Comprobación de reglas (DRC)</td><td>Reglas de JLCPCB con margen</td><td data-m="drc"></td></tr>
+      <tr><td>Primera captura real</td><td>UART de un ESP32</td><td data-m="baudio_uart"></td></tr>
+    </tbody>
+  </table></div>
+  <div class="tabla"><table>
+    <thead><tr><th>Canal</th><th>GPIO de la Pico</th><th class="n">Pin de la Pico</th><th class="n">Pin de J1</th><th>Resistencia</th></tr></thead>
+    <tbody>
+      <tr><td>D2</td><td>GP2</td><td class="n">4</td><td class="n">2</td><td>R1</td></tr>
+      <tr><td>D3</td><td>GP3</td><td class="n">5</td><td class="n">4</td><td>R2</td></tr>
+      <tr><td>D4</td><td>GP4</td><td class="n">6</td><td class="n">6</td><td>R3</td></tr>
+      <tr><td>D5</td><td>GP5</td><td class="n">7</td><td class="n">8</td><td>R4</td></tr>
+      <tr><td>D6</td><td>GP6</td><td class="n">9</td><td class="n">10</td><td>R5</td></tr>
+      <tr><td>D7</td><td>GP7</td><td class="n">10</td><td class="n">12</td><td>R6</td></tr>
+      <tr><td>D8</td><td>GP8</td><td class="n">11</td><td class="n">14</td><td>R7</td></tr>
+      <tr><td>D9</td><td>GP9</td><td class="n">12</td><td class="n">16</td><td>R8</td></tr>
+    </tbody>
+  </table></div>
+  <p>Los pines impares de J1 son masa.</p>
+</section>
+
+<section>
+  <h2>Decisiones de diseño</h2>
+  <div class="decisiones" id="decisiones">
+    <div class="decision"><h3>¿Protege la resistencia en serie contra 5 V?</h3><p class="pend">Por escribir, con mis palabras.</p></div>
+    <div class="decision"><h3>¿Qué valor de resistencia, y por qué?</h3><p class="pend">Por escribir, con mis palabras.</p></div>
+    <div class="decision"><h3>¿Por qué ocho masas en el conector?</h3><p class="pend">Por escribir, con mis palabras.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Esquema</h2>
+  <figure data-img="capturas/esquema.png" data-paso="3.7">
+    <div class="hueco"><b>Falta la captura del esquema</b><span>capturas\esquema.png · paso 3.7 de la guía</span></div>
+    <figcaption>Esquema de la v1.0. <a href="docs/draupnir-esquema.pdf">Versión en PDF</a>.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <h2>Placa</h2>
+  <p>Dos capas. Las dieciocho pistas van por la cara superior y la inferior es un plano de masa sin cortes, así que cada señal tiene su retorno justo debajo y no hace falta ninguna vía. Todas las piezas son de agujero pasante y están colocadas sobre una rejilla de 1,27 mm.</p>
+  <div class="galeria">
+    <figure data-img="capturas/pcb-top.png" data-paso="4.11">
+      <div class="hueco"><b>Falta la cara superior</b><span>capturas\pcb-top.png · paso 4.11</span></div>
+      <figcaption>Cara superior: pistas y serigrafía.</figcaption>
+    </figure>
+    <figure data-img="capturas/pcb-bottom.png" data-paso="4.11">
+      <div class="hueco"><b>Falta la cara inferior</b><span>capturas\pcb-bottom.png · paso 4.11</span></div>
+      <figcaption>Cara inferior: plano de masa.</figcaption>
+    </figure>
+    <figure data-img="capturas/huella-pico.png" data-paso="2.2">
+      <div class="hueco"><b>Falta la huella de la Pico</b><span>capturas\huella-pico.png · paso 2.2</span></div>
+      <figcaption>Huella de la Pico, medida contra la hoja de datos: 17,78 mm entre filas.</figcaption>
+    </figure>
+    <figure data-img="capturas/jlcpcb-visor.png" data-paso="6.4">
+      <div class="hueco"><b>Falta el visor del fabricante</b><span>capturas\jlcpcb-visor.png · paso 6.4</span></div>
+      <figcaption>Los Gerbers, tal como los entiende JLCPCB.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <h2>Medidas</h2>
+  <div class="galeria">
+    <figure data-img="capturas/uart-protoboard.png" data-paso="1.5">
+      <div class="hueco"><b>Falta la captura del UART</b><span>capturas\uart-protoboard.png · paso 1.5</span></div>
+      <figcaption>Primera captura, en protoboard: el UART de un termómetro con ESP32.</figcaption>
+    </figure>
+    <figure data-img="capturas/8-canales.png" data-paso="7.4">
+      <div class="hueco"><b>Falta la prueba de los 8 canales</b><span>capturas\8-canales.png · paso 7.4</span></div>
+      <figcaption>Los ocho canales con la placa ya montada.</figcaption>
+    </figure>
+  </div>
+  <p>Todas las medidas, con su fecha y su instrumento, están en <a href="MEDIDAS.md">MEDIDAS.md</a>.</p>
+</section>
+
+<section>
+  <h2>Lo que falló</h2>
+  <dl class="fallo" id="fallo">
+    <dt>Qué falló</dt><dd class="pend">Pendiente.</dd>
+    <dt>Por qué</dt><dd class="pend">Pendiente.</dd>
+    <dt>Arreglo</dt><dd class="pend">Pendiente.</dd>
+  </dl>
+  <p>El resto de fallos, en la <a href="BITACORA.md">bitácora</a>.</p>
+</section>
+
+<section>
+  <h2>Lo que aprendí</h2>
+  <ul class="lista" id="aprendido"><li class="pend">Pendiente.</li></ul>
+</section>
+
+<section>
+  <h2>Coste y fechas</h2>
+  <div class="tabla"><table>
+    <thead><tr><th>Concepto</th><th>Valor</th></tr></thead>
+    <tbody>
+      <tr><td>5 placas en JLCPCB</td><td data-c="placas"></td></tr>
+      <tr><td>Envío</td><td data-c="envio"></td></tr>
+      <tr><td>Piezas de una placa, sin la Pico</td><td data-c="piezas"></td></tr>
+      <tr><td>Pedido</td><td data-f="pedido"></td></tr>
+      <tr><td>Montaje y primera medida</td><td data-f="montaje"></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Cómo reproducirlo</h2>
+  <ul class="lista">
+    <li>El <a href="README.md">README</a> explica cómo se usa y cómo se fabrica.</li>
+    <li><span id="repro-herr"></span>Para quien no tenga la herramienta del diseño, el esquema está en PDF y los Gerbers van en cada versión publicada.</li>
+    <li>Firmware: <a href="https://github.com/pico-coder/sigrok-pico">sigrok-pico</a>, sin modificar. Software: PulseView, versión <i>nightly</i>.</li>
+    <li id="repo-li" hidden>Repositorio: <a id="repo-a" href="#"></a></li>
+  </ul>
+</section>
+
+<footer id="pie">Forja · Lemnos · Draupnir v1.0</footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var F = window.FICHA || {};
+  var M = F.medidas || {}, faltan = [];
+  function txt(v) { return (v == null ? "" : String(v)).trim(); }
+  function pon(el, v, que) {
+    if (txt(v)) { el.textContent = v; el.classList.remove("pend"); }
+    else { el.textContent = "pendiente"; el.classList.add("pend"); if (que) faltan.push(que); }
+  }
+  var PASO = { resistencia_serie: "1.3", baudio_uart: "1.5", drc: "4.10", tension_3v3: "7.3", canales: "7.4", limite_util: "7.5" };
+  var NOMBRE = { resistencia_serie: "resistencia en serie", baudio_uart: "baudio del UART", drc: "resultado del DRC", tension_3v3: "tensión de 3,3 V", canales: "prueba de los 8 canales", limite_util: "límite útil" };
+  Array.prototype.forEach.call(document.querySelectorAll("[data-m]"), function (td) {
+    var k = td.getAttribute("data-m");
+    pon(td, M[k], "Medida: " + NOMBRE[k] + " (paso " + PASO[k] + ")");
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-c]"), function (td) { pon(td, (F.coste || {})[td.getAttribute("data-c")], null); });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-f]"), function (td) { pon(td, (F.fechas || {})[td.getAttribute("data-f")], null); });
+  if (!txt((F.coste || {}).placas)) faltan.push("Coste del pedido (paso 6.6)");
+
+  // decisiones, con las palabras del autor
+  var dz = document.getElementById("decisiones");
+  if (F.decisiones && F.decisiones.length) {
+    dz.textContent = "";
+    F.decisiones.forEach(function (d, i) {
+      var div = document.createElement("div"); div.className = "decision";
+      var h = document.createElement("h3"); h.textContent = d.pregunta; div.appendChild(h);
+      var p = document.createElement("p");
+      if (txt(d.texto)) p.textContent = d.texto; else { p.textContent = "Por escribir, con mis palabras."; p.className = "pend"; faltan.push("Decisión " + (i + 1) + ", con tus palabras" + (i < 3 ? " (paso 1." + (i + 2) + ")" : "")); }
+      div.appendChild(p); dz.appendChild(div);
+    });
+  }
+
+  // fallo y aprendizaje
+  var fa = F.fallo || {}, dds = document.querySelectorAll("#fallo dd");
+  pon(dds[0], fa.que, "El fallo que más te enseñó (paso 7.6)"); pon(dds[1], fa.por_que, null); pon(dds[2], fa.arreglo, null);
+  var ap = (F.aprendido || []).map(txt).filter(Boolean), ul = document.getElementById("aprendido");
+  if (ap.length) { ul.textContent = ""; ap.forEach(function (s) { var li = document.createElement("li"); li.textContent = s; ul.appendChild(li); }); }
+  else faltan.push("Tres cosas aprendidas (paso 7.6)");
+
+  // cabecera
+  var EST = { "diseño": "En diseño", "pedida": "Enviada a fabricar", "montada": "Montada", "medida": "Montada y medida" };
+  var chips = document.getElementById("chips");
+  chips.children[0].textContent = EST[F.estado] || "En diseño";
+  chips.children[1].textContent = txt(F.version) || "v1.0";
+  var herr = txt(F.herramienta);
+  if (herr) {
+    document.getElementById("chip-herr").textContent = herr;
+    document.getElementById("herr-lema").textContent = " en " + herr;
+    document.getElementById("repro-herr").textContent = "El diseño está en " + herr + ". ";
+  } else { faltan.unshift("Herramienta usada: KiCad o Altium (paso 0.1)"); }
+  document.getElementById("pie").textContent = [txt(F.autor), "Forja · Lemnos", "Draupnir " + (txt(F.version) || "v1.0")].filter(Boolean).join(" · ");
+  if (txt(F.repositorio)) { var a = document.getElementById("repo-a"); a.href = F.repositorio; a.textContent = F.repositorio; document.getElementById("repo-li").hidden = false; }
+
+  // imágenes: aparecen solas cuando el archivo existe
+  var pendientes = 0;
+  function pintaFaltan() {
+    var caja = document.getElementById("borrador"), lista = document.getElementById("faltan");
+    if (!faltan.length) { caja.hidden = true; return; }
+    caja.hidden = false; lista.textContent = "";
+    faltan.forEach(function (f) { var li = document.createElement("li"); li.textContent = f; lista.appendChild(li); });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("figure[data-img]"), function (fig) {
+    var rutas = fig.getAttribute("data-img").split(","), hueco = fig.querySelector(".hueco"), i = 0;
+    pendientes++;
+    function prueba() {
+      if (i >= rutas.length) { faltan.push("Imagen: " + rutas[0].replace("/", "\\") + " (paso " + fig.getAttribute("data-paso") + ")"); if (--pendientes === 0) pintaFaltan(); return; }
+      var img = new Image();
+      img.onload = function () { img.alt = fig.querySelector("figcaption").textContent; fig.replaceChild(img, hueco); if (--pendientes === 0) pintaFaltan(); };
+      img.onerror = function () { i++; prueba(); };
+      img.src = rutas[i];
+    }
+    prueba();
+  });
+  if (pendientes === 0) pintaFaltan();
+})();
+</script>

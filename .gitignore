@@ -11,6 +11,7 @@ _autosave-*
 fp-info-cache
 *.kicad_sym-cache
 *.kicad_prl
+.history/
 
 # --- Altium: historial, registros y vistas previas ---
 History/
@@ -36,6 +37,7 @@ firmware/build/
 *.bin
 *.hex
 *.map
+*.uf2
 
 # --- Hojas de datos y modelos SPICE: son de sus fabricantes; aquí solo el enlace ---
 docs/hojas-de-datos/*.pdf
@@ -45,6 +47,9 @@ simulacion/modelos/
 pasos.html
 guia-altium.html
 guia-kicad.html
+taller/
+docs/HTML's/
+fotos/huella-pico2.png
 
 # --- Sistema ---
 desktop.ini

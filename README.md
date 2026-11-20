@@ -4,7 +4,7 @@
 
 Analizador lógico de 8 canales: una Raspberry Pi Pico con el firmware libre [sigrok-pico](https://github.com/pico-coder/sigrok-pico) y PulseView en el PC, sobre una PCB propia con protección de entradas. **La v1 es solo para señales de 3,3 V.** El buffer que acepta 5 V (74LVC245) llega en la v2.
 
-**Metal:** Mineral → objetivo Bronce · **Campaña:** 2026-11 «Forjar el banco» · **EDA:** _____ (KiCad 10 o Altium Designer 26: apunta la que uses), con la biblioteca Forja de [Akmon](https://github.com/BMarquinaProyects/akmon)
+**Metal:** Mineral → objetivo Bronce · **Campaña:** 2026-11 «Forjar el banco» · **EDA:** KiCad 10, con la biblioteca Forja de [Akmon](https://github.com/BMarquinaProjects/akmon)
 
 <!-- Foto de la placa montada: fotos/draupnir.jpg (5 dic) -->
 
@@ -14,12 +14,22 @@ Analizador lógico de 8 canales: una Raspberry Pi Pico con el firmware libre [si
 |---|---|
 | Canales | 8: D2 a D9 de sigrok-pico (GPIO 2 a 9 de la Pico) |
 | Niveles de entrada | 3,3 V. **No admite 5 V** |
-| Protección por canal | Resistencia en serie de _____ Ω (decisión 2 de la bitácora; cuentas en MEDIDAS.md) |
+| Protección por canal | Resistencia en serie de 1 kΩ (decisión 2 de la bitácora; cuentas en MEDIDAS.md) |
 | Conector de entrada | 2 × 8, paso 2,54 mm, con una masa junto a cada señal |
 | Muestreo máximo útil | _____ MHz (limitado por _____) |
 | Firmware | sigrok-pico, versión _____ |
 | Software en el PC | PulseView nightly del _____ |
 | Placa | 2 capas, 58,4 × 55,9 mm, todo de agujero pasante, JLCPCB |
+
+## La placa
+
+| Cara superior | Cara inferior |
+|---|---|
+| ![Cara superior de la PCB en KiCad: pistas en F.Cu, resistencias junto a J1 y la Pico](capturas/pcb-top.png) | ![Cara inferior de la PCB en KiCad: plano de masa en B.Cu](capturas/pcb-bottom.png) |
+
+![Vista 3D de Draupnir v1.0 en KiCad, con la Pico, las 9 resistencias, el LED y el logo](capturas/pcb-3d.png)
+
+Pistas por la cara de arriba y plano de masa entero por la de abajo. Los Gerbers de cada pedido están en las [releases](../../releases).
 
 ## Cómo se usa
 

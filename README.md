@@ -1,7 +1,5 @@
 # Draupnir
 
-> Draupnir, el anillo de oro de Odín. Cada nueve noches gotea ocho anillos iguales a él: ocho canales salidos de una sola Pico.
-
 Analizador lógico de 8 canales: una Raspberry Pi Pico con el firmware libre [sigrok-pico](https://github.com/pico-coder/sigrok-pico) y PulseView en el PC, sobre una PCB propia con protección de entradas. **La v1 es solo para señales de 3,3 V.** El buffer que acepta 5 V (74LVC245) llega en la v2.
 
 **Metal:** Mineral → objetivo Bronce · **Campaña:** 2026-11 «Forjar el banco» · **EDA:** KiCad 10, con la biblioteca Forja de [Akmon](https://github.com/BMarquinaProjects/akmon)
